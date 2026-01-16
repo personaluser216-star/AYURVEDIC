@@ -1,8 +1,9 @@
 "use client";
+export const dynamic = "force-dynamic";
 
-import { clearShoppingCart } from "@/utils/shoppingcart";
-import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { clearShoppingCart } from "@/utils/shoppingcart";
 
 export default function VerifyPage() {
   const searchParams = useSearchParams();
@@ -15,16 +16,17 @@ export default function VerifyPage() {
 
       if (!orderId) return;
 
-      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/order/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ orderId, success }),
-      });
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/order/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ orderId, success }),
+        });
 
-      if (success === "true") {
-        clearShoppingCart();
+        if (success === "true") clearShoppingCart();
         router.push("/");
-      } else {
+      } catch (err) {
+        console.error("Verify API error:", err);
         router.push("/");
       }
     };
