@@ -14,10 +14,13 @@ export default function VerifyPage() {
       const orderId = searchParams.get("orderId");
       const success = searchParams.get("success");
 
-      if (!orderId) return;
+      if (!orderId) {
+        router.push("/");
+        return;
+      }
 
       try {
-        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/order/verify`, {
+        await fetch("/api/order/verify", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ orderId, success }),
@@ -32,7 +35,7 @@ export default function VerifyPage() {
     };
 
     verifyPayment();
-  }, []);
+  }, [searchParams, router]);
 
   return <p className="text-center mt-20">Verifying payment...</p>;
 }
