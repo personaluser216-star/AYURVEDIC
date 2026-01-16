@@ -15,7 +15,7 @@ export default function VerifyPage() {
 
       if (!orderId) return;
 
-      await fetch("/api/order/verify", {
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/order/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ orderId, success }),
