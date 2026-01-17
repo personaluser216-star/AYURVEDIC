@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
@@ -38,17 +39,31 @@ const sidebarMenu = [
   },
 ];
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ sidebarOpen }) {
   const [openMenu, setOpenMenu] = useState(null);
 
   return (
-    <aside className="w-64 p-5 border-r bg-white">
+    <aside
+      className={`
+        ${sidebarOpen ? "w-64" : "w-20"}
+        transition-all duration-300
+        p-4 border-r bg-white border-gray-300
+      `}
+    >
+      {/* Logo */}
       <div className="flex justify-center mb-6">
-        <Image src="/logo.png" alt="Logo" width={100} height={30} />
+        <Image
+          src="/logo.png"
+          alt="Logo"
+          width={sidebarOpen ? 100 : 40}
+          height={30}
+        />
       </div>
 
       <ul className="space-y-2 text-black">
-        <p className="text-gray-500">Menu</p>
+        {sidebarOpen && (
+          <p className="text-gray-500 text-sm mb-2 uppercase">Menu</p>
+        )}
 
         {sidebarMenu.map((menu) => (
           <li key={menu.title}>
@@ -62,16 +77,20 @@ export default function AdminSidebar() {
                 >
                   <span className="flex items-center gap-3">
                     <menu.icon size={18} />
-                    {menu.title}
+                    {sidebarOpen && menu.title}
                   </span>
-                  <MdKeyboardArrowDown />
+                  {sidebarOpen && <MdKeyboardArrowDown />}
                 </button>
 
-                {openMenu === menu.title && (
+                {/* Dropdown only when sidebar open */}
+                {sidebarOpen && openMenu === menu.title && (
                   <ul className="ml-8 mt-1 space-y-1 text-gray-600">
                     {menu.items.map((item) => (
                       <li key={item.label}>
-                        <Link href={item.href} className="block p-2 hover:bg-gray-100 rounded">
+                        <Link
+                          href={item.href}
+                          className="block p-2 hover:bg-gray-100 rounded"
+                        >
                           {item.label}
                         </Link>
                       </li>
@@ -80,9 +99,12 @@ export default function AdminSidebar() {
                 )}
               </>
             ) : (
-              <Link href={menu.href} className="flex items-center gap-3 p-2 rounded hover:bg-gray-100">
+              <Link
+                href={menu.href}
+                className="flex items-center gap-3 p-2 rounded hover:bg-gray-100"
+              >
                 <menu.icon size={18} />
-                {menu.title}
+                {sidebarOpen && menu.title}
               </Link>
             )}
           </li>
