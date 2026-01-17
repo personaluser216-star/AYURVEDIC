@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import Order from "@/models/order"
 import { connectDB } from "@/lib/mongodb";
+import order from "@/models/order";
 
 export const createOrder = async (req) => {
   try {
@@ -47,6 +48,24 @@ export const createOrder = async (req) => {
     console.error("Create Order Error:", error);
     return NextResponse.json(
       { error: "Order creation failed" },
+      { status: 500 }
+    );
+  }
+};
+export const getOrder = async()=> {
+  try {
+    await connectDB();
+
+   
+
+    const products = await order.find();
+    return NextResponse.json(
+      { success: true, data: products },
+      { status: 200 }
+    );
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, message: "Failed to get products" },
       { status: 500 }
     );
   }

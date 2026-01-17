@@ -28,8 +28,12 @@ const sidebarMenu = [
   {
     title: "Order",
     icon: GrCart,
-    dropdown: false,
-    href: "/admin/orders",
+    dropdown: true,
+   
+     items: [
+
+      { label: "All Order", href: "/admin/order/allorder" },
+    ],
   },
   {
     title: "Users Profile",
